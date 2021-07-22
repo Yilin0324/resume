@@ -41,7 +41,7 @@ header a.active:after {
 #hero {
   width: 100%;
   height: 100vh;
-  background: url("images/hero1.jpg") top right;
+  background: url("../../images/hero1.jpg") top right;
   background-size: cover;
   position: relative;
 }
@@ -157,7 +157,7 @@ section {
 }
 
 .about .image {
-  background: url("images/me.jpg") center center no-repeat;
+  background: url("../../images/me.jpg") center center no-repeat;
   background-size: cover;
   min-height: 500px;
   border-radius: 10px;
@@ -315,7 +315,7 @@ section {
 # Contact Me
 --------------------------------------------------------------*/
 .contact{
-  background: url(images/footer-bg.jpg) center center no-repeat;
+  background: url("../../images/footer-bg.jpg") center center no-repeat;
   background-size: cover;
   background-attachment: fixed;
   width: 100%;
