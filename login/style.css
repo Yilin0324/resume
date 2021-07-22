@@ -12,7 +12,7 @@ section{
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background: url(loginBg.jpeg) center center fixed no-repeat;
+    background: url("./loginBg.jpg") center center fixed no-repeat;
     background-size: cover;
 }
 
