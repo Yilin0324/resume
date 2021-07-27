@@ -57,8 +57,18 @@ $(window).resize(bgmenu);
 spy();
 bgmenu();
 
+
 //animate
 AOS.init({
   duration: 1000,
   once: true
+});
+
+var app = document.getElementById('app');
+
+var typewriter = new Typewriter(app, {
+  strings:["I'm Web designer & performing artist","A favorite of the girls try new things."],
+  autoStart:true,
+  loop: true,
+  delay: 75,
 });
