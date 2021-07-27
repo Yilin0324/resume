@@ -1,90 +1,64 @@
-window.onload = function () {
-    const offset = document.querySelector('#header-nav').offsetHeight;
-    let sections = {};
-    document.querySelectorAll('section').forEach(e => {
-      sections[e.id] = {
-        top: e.offsetTop,
-        bottom: e.offsetTop + e.offsetHeight
-      };
-    });
-    let scrollSpy = () => {
-      // let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop; // 因平台不同有不同解讀方法
-      const
-        startY = document.scrollingElement.scrollTop, // 新語法可跨平台
-        viewTop = startY + offset; //原滾動處下修至選單高度之偏移
-      for (const key in sections) {
-        if (sections[key].top <= viewTop && viewTop <= sections[key].bottom) {
-          let turnOff = document.querySelector(`#header-nav a.active:not([href="#${key}"])`);
-          if (turnOff) turnOff.classList.remove('active'); //如果存在持有.active但不是持有href=key的人，取消他的active
-          let turnOn = document.querySelector(`#header-nav a[href="#${key}"]:not(.active)`);
-          if (turnOn) turnOn.classList.add('active'); //如果存在未持有.active但持有href=key的人，增加他的active
-        }
-      };
-    };
-  
-    let indexShown = () => {
-      const
-        viewWidth = document.scrollingElement.offsetWidth,
-        indexBottom = document.querySelector('#about').offsetHeight,
-        targetMenu = document.querySelector('#header-nav'),
-        targetArrow = document.querySelector('#Arrow'),
-        startY = document.scrollingElement.scrollTop; // 新語法可跨平台
-  
-      if (viewWidth >= 992) { //屬於大螢幕時才會做判斷
-        if (startY < indexBottom - offset) { //於slider內
-          targetMenu.classList.remove('bg-dark');
-          targetArrow.classList.remove('shown');
-        } else {
-          targetMenu.classList.add('bg-dark');
-          targetArrow.classList.add('shown');
-        }
-      } else targetMenu.classList.add('bg-dark');
+//scroll to id
+$("#Menu a, #Arrow a").click(function () {
+  const
+    who = $(this).attr('href'),
+    val = $(who).offset().top - $("#Menu").innerHeight();
+  $("html").animate({ scrollTop: val }, 1000);
+});
+
+//scroll spy
+const spy = function () {
+  const nowat = $(window).scrollTop();
+  $("section").each((i, e) => {
+    // console.log(i,e);
+    const
+      id = $(e).attr('id'),
+      offset = $(e).offset().top - $("#Menu").innerHeight() - 1,
+      height = $(e).innerHeight();
+
+
+    if (offset <= nowat && nowat < offset + height) {
+      // console.log(id);
+      $("#Menu a").removeClass('active');
+      $(`#Menu a[href='#${id}']`).addClass('active');
     }
-  
-    window.onscroll = () => {
-      scrollSpy();
-      indexShown();
-    };
-    window.onresize = () => { //當有人對window重新調整尺寸時
-      indexShown();
-    }
-    scrollSpy();
-    indexShown();
-  
-document.querySelectorAll("#header-nav a,#Arrow a").forEach(e => {
-      e.onclick = function (event) {
-        event.preventDefault();
-        const targetID = e.getAttribute("href");
-  
-        scrollToId(document.querySelector(targetID).offsetTop - offset + 1, 1500);
-      };
-    });
-  
-    function scrollToId(toY, duration) {
-      const
-        startNode = document.scrollingElement, // 新語法可跨平台
-        startY = startNode.scrollTop,
-        changeY = toY - startNode.scrollTop,
-        startTime = +new Date();
-  
-      Math.easeInOutQuad = function (t, b, c, d) {
-        // t = current time
-        // b = start value
-        // c = change in value
-        // d = duration
-        t /= d / 2;
-        if (t < 1) return c / 2 * t * t + b;
-        t--;
-        return -c / 2 * (t * (t - 2) - 1) + b;
-      };
-  
-      let animateScroll = function () {
-        console.log(1);
-        const currentTime = +new Date() - startTime;
-        let val = Math.easeInOutQuad(currentTime, startY, changeY, duration);
-        startNode.scrollTop = val;
-        if (currentTime < duration) requestAnimationFrame(animateScroll); //frame pre 60/s => 100ms
-      };
-      animateScroll();
-    }
-  };
+  });
+}
+
+//check bg menu
+const bgmenu = function () {
+  const
+    viewWidth = $(window).innerWidth(),
+    nowat = $(window).scrollTop(),
+    height = $("#hero").innerHeight(),
+    offset = $("#Menu").innerHeight() + 1;
+
+  if (nowat <= height - offset) {  //落在 首區內
+    $("#Arrow").fadeOut(); //隱藏至頂按鈕
+
+    if (viewWidth > 767) $("#Menu").removeClass('bg-dark');  // 大畫面
+    else $("#Menu").addClass('bg-dark'); // 小畫面
+
+  } else {  //在其他主題時
+    $("#Menu").addClass('bg-dark');
+    $("#Arrow").fadeIn();
+  }
+}
+
+//當網頁滾動時
+$(window).scroll(() => {
+  spy();
+  bgmenu();
+});
+//當網頁更改寬度時
+$(window).resize(bgmenu);
+
+
+spy();
+bgmenu();
+
+//animate
+AOS.init({
+  duration: 1000,
+  once: true
+});

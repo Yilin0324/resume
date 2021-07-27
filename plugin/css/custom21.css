@@ -22,14 +22,6 @@ header a.active:after {
   scroll-behavior: auto;
 }
 
-#Arrow {
-  opacity: 0;
-  transition: 500ms ease;
-}
-
-#Arrow.shown {
-  opacity: 1;
-}
 
 #header-nav {
   transition: 1s ease;
@@ -360,10 +352,12 @@ section {
 /*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/
+
 #Arrow{
   right: 5vh;
   bottom: 5vh;
   z-index: 999;
+  display: none;
 }
 
 #Arrow i {
@@ -403,3 +397,30 @@ section {
       }
     }
 /*------/ Back to top button /------*/
+
+/*********轉場*************/
+
+.nav-link {
+  transition: 1.5s ease;
+}
+
+#Menu{
+  transition: 2s;
+}
+
+.nav-link::after,
+#Menu .navbar-brand::after {
+  content: "";
+  display: block;
+  height: 2px;
+  width: 0%;
+  background: white;
+  margin: 5px 0;
+  transition: 1s width ease;
+}
+
+.nav-link.active::after,
+#Menu .navbar-brand.active::after {
+  width: 100%;
+}
+
